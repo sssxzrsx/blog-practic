@@ -41,3 +41,6 @@ Route::group(['middleware'=>'guest'], function (){
 Route::get('/login', [UserController::class, 'loginForm'])->name('login.create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
+Route::get('/', [\App\Http\Controllers\Admin\PostController::class, 'index'])->name('home');
+Route::get('/article', [\App\Http\Controllers\Admin\PostController::class, 'show'])->name('posts.single');
