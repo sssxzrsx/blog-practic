@@ -45,6 +45,8 @@
                       <th>Content</th>
                       <th>Category</th>
                       <th>Views</th>
+                      <th>Tag</th>
+                      <th>Image</th>
                       <th style="width: 40px">action</th>
                     </tr>
                   </thead>
@@ -57,8 +59,11 @@
                           <td class="align-content-center">{{$post->description}}</td>
                           <td class="align-content-center">{{$post->content}}</td>
                           <td class="align-content-center">{{$post->category->title}}</td>
-                          <td class="align-content-center">{{$post->tags->pluck('title')->join(', ')}}</td>
                           <td class="align-content-center">{{$post->views}}</td>
+                          <td class="align-content-center">{{$post->tags->pluck('title')->join(', ')}}</td>
+                          <td class="align-content-center">
+                              <img src="{{ asset(str_replace('public/', 'storage/', $post->yhumbnail)) }}" alt="" width="250px" height="auto">
+                          </td>
                           <td class="align-content-center">
                               <form method="GET" action="{{route('posts.edit', ['post' => $post->id])}}">
                                   @csrf
