@@ -53,7 +53,7 @@ class TagController extends Controller
     public function edit(string $id)
     {
         $tag = Tag::findOrFail($id);
-        return view('admin.categories.edit', compact('tag'));
+        return view('admin.tags.edit', compact('tag'));
     }
 
     /**

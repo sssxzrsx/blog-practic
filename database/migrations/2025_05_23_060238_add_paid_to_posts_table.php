@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('is_admin')->default(0);
+        Schema::table('posts', function (Blueprint $table) {
+            $table->index('title');
         });
     }
 
@@ -21,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_admin');
-
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropIndex('title');
         });
     }
 };

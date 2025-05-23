@@ -42,32 +42,13 @@ class PostController extends Controller
             'category_id' => 'required|integer',
             'thumbnail' => 'nullable|image',
         ]);
-        $data = $request->all();
-        $data['thumbnail'] = Post::uploadImage($request);
-        $post = Post::create($data);
-        $post->tags()->sync($request->tags);
-        return redirect()->route('posts.index')->with('success', 'Статья добавлена');
-
-
-//        $validatedData = $request->validate([
-//            'title'=>'required',
-//            'description'=>'required',
-//            'content'=>'required',
-//            'category_id'=>'required|integer',
-//            'yhumbnail'=>'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//        ]);
-//
-//        if ($request->hasFile('yhumbnail')) {
-//            $folder = date('Y-m-d');
-//            $validatedData['yhumbnail'] = $request->file('yhumbnail')->store("{images/$folder}");
-//        }
-//        $validatedData['views'] = 0;
-//        $post = Post::create($validatedData);
-//        $validatedData['yhumbnail'] = $post->uploadImage($request->file('yhumbnail'));
-//        $post->tags()->sync($request->tags);
-//        return to_route('posts.index', $validatedData) -> with('success', 'Статья успешно создана');
+         $validatedData['views'] = 0;
+         $data = $request->all();
+         $data['thumbnail'] = Post::uploadImage($request);
+         $post = Post::create($data);
+         $post->tags()->sync($request->tags);
+         return redirect()->route('posts.index')->with('success', 'Статья добавлена');
     }
-
 
     /**
      * Display the specified resource.
@@ -83,9 +64,9 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::find($id);
-        $categories = Category::pluck('title', 'id')->all();
-        $tags = Tag::pluck('title', 'id')->all();
-        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
+         $categories = Category::pluck('title', 'id')->all();
+         $tags = Tag::pluck('title', 'id')->all();
+         return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -93,22 +74,39 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validatedData = $request->validate([
-            'title'=>'required',
-            'description'=>'required',
-            'content'=>'required',
-            'category_id'=>'required',
-            'yhumbnail'=>'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        $post = Post::find($id);
-        $data = $request->all();
-        $data['yhumbnail'] = Post::uploadImage($request, $post->yhumbnail);
 
-        $post->update($data);
-        $post->tags()->sync($request->tags);
-        return to_route('posts.index')->with('success', 'Изменения сохранены');
+    $post = Post::findOrFail($id);
 
+
+    $request->validate([
+        'title'       => 'required',
+        'description' => 'required',
+        'content'     => 'required',
+        'category_id' => 'required',
+        'thumbnail'   => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $data = $request->all();
+
+
+    if ($request->hasFile('thumbnail')) {
+        $data['thumbnail'] = Post::uploadImage($request, $post->thumbnail);
+    } else {
+        $data['thumbnail'] = $post->thumbnail;
     }
+
+
+    $post->update($data);
+
+
+    if ($request->has('tags')) {
+        $post->tags()->sync($request->tags);
+    }
+
+    return redirect()->route('posts.index')->with('success', 'Изменения сохранены');
+}
+
+
 
     /**
      * Remove the specified resource from storage.

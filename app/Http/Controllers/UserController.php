@@ -17,21 +17,22 @@ class UserController extends Controller
 
     public function store (Request $request)
     {
-        $request->validate([
-            'name'=>'required',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|confirmed',
-        ]);
+       $request->validate([
+        'name'=>'required',
+        'email'=>'required|email|unique:users',
+        'password'=>'required|confirmed',
+       ]);
 
-        $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password),
-        ]);
-        session()->flash('success', ' Регистрация пройдена');
-        Auth::login($user);
-        return redirect()->route('home');
+       $user = User::create([
+        'name'=>$request->name,
+        'email'=>$request->email,
+        'password'=>bcrypt($request->password),
+       ]);
+       session()->flash('success', ' Регистрация пройдена');
+       Auth::login($user);
+       return redirect()->route('home');
     }
+
     public function loginForm()
     {
         return view('admin.users.login');
@@ -42,7 +43,7 @@ class UserController extends Controller
         $request->validate([
             'email'=>'required|email',
             'password'=>'required',
-        ]);
+           ]);
 
         if(Auth::attempt([
             'email'=>$request->email,

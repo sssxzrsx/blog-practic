@@ -3,6 +3,9 @@
 use App\Admin\CategoryController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\PostController as ControllersPostController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,15 +35,19 @@ Route::group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin'],
     Route::resource('tags', App\Http\Controllers\Admin\TagController::class);
     Route::resource('posts', App\Http\Controllers\Admin\PostController::class);
 });
+Route::put('/posts/{id}', [PostController::class, 'update']);
 
-Route::group(['middleware'=>'guest'], function (){
-    Route::get('/register', [UserController::class, 'create'])->name('register.create');
-    Route::post('/register', [UserController::class, 'store'])->name('register.store');
-});
+Route::get('/register', [UserController::class, 'create'])->name('register.create');
+Route::post('/register', [UserController::class, 'store'])->name('register.store');
 
 Route::get('/login', [UserController::class, 'loginForm'])->name('login.create');
 Route::post('/login', [UserController::class, 'login'])->name('login');
-Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::get('/', [\App\Http\Controllers\Admin\PostController::class, 'index'])->name('home');
-Route::get('/article', [\App\Http\Controllers\Admin\PostController::class, 'show'])->name('posts.single');
+Route::get('/',[App\Http\Controllers\PostController::class,'index'])->name('home');
+Route::get('/article/{slug}',[App\Http\Controllers\PostController::class,'show'])->name('posts.single');
+Route::get('/category/{slug}',[App\Http\Controllers\CategoryController::class,'show'])->name('categories.single');
+Route::get('/tag/{slug}',[App\Http\Controllers\TagController::class,'show'])->name('tags.single');
+
+
+Route::get('/search', [SearchController::class, 'index'])->name('search');

@@ -28,9 +28,9 @@
                                 <h3 class="card-title">Новая статья</h3>
                             </div>
                             <!-- /.card-header -->
+
                             <form role="form" method="post" action="{{ route('posts.store') }}" enctype="multipart/form-data">
                                 @csrf
-                                @extends('components.alerts')
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="title">Название</label>
@@ -71,20 +71,22 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="yhumbnail">Изображение</label>
+                                        <label for="thumbnail">Изображение</label>
                                         <div class="input-group">
                                             <div class="custom-file">
-                                                <input type="file" name="yhumbnail" id="yhumbnail"
+                                                <input type="file" name="thumbnail" id="thumbnail"
                                                        class="custom-file-input">
-                                                <label class="custom-file-label" for="yhumbnail">Choose file</label>
+                                                <label class="custom-file-label" for="thumbnail">Choose file</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- /.card-body -->
+
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Сохранить</button>
                                 </div>
-                                <!-- /.card-body -->
                             </form>
 
                         </div>

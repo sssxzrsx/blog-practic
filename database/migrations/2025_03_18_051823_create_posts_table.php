@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('content');
             $table->integer('category_id')->unsigned();
             $table->integer('views')->unsigned()->default(0);
-            $table->string('yhumbnail')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
     }
